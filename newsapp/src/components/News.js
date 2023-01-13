@@ -36,10 +36,10 @@ export default class News extends Component {
         }
         document.title = `${this.captalizeStr(this.props.category)} - NewsPanda`
     }
-    
-    async componentDidMount() {
+
+        async componentDidMount() {
         this.props.setProgress(10)
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.api_key}&page=${this.state.page}&pagesize=${this.props.pageSize}`
+        const url = `https://gnews.io/api/v4/top-headlines?topic=${this.props.category}&token=${this.props.api_key}&lang=en&country=${this.props.country}&max=20`
         this.setState({ loading: true })
         let data = await fetch(url)
         this.props.setProgress(30)
@@ -47,31 +47,31 @@ export default class News extends Component {
         this.props.setProgress(70)
         this.setState({
             articles: parsedData.articles,
-            totalResults: parsedData.totalResults,
+            totalResults: parsedData.totalArticles,
             loading: false
         })
         this.props.setProgress(100)
         console.log(parsedData)
-        console.log("DidMount"+this.state.page)
+        console.log("DidMount" + this.state.page)
     }
-   
+
     fetchMoreData = async () => {
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.api_key}&page=${this.state.page + 1}&pagesize=${this.props.pageSize}`
+        const url = `https://gnews.io/api/v4/top-headlines?topic=${this.props.category}&token=${this.props.api_key}&lang=en&country=${this.props.country}&max=20`
         this.setState({ page: this.state.page + 1 })
         let data = await fetch(url)
         let parsedData = await data.json()
         this.setState({
             articles: this.state.articles.concat(parsedData.articles),
-            totalResults: parsedData.totalResults
+            totalResults: parsedData.totalArticles
         })
         console.log(parsedData)
-        console.log("fetchmore"+ this.state.page)
+        console.log("fetchmore" + this.state.page)
     }
 
     render() {
         return (
             <>
-                <h1 className='img-fluid text-center' style={{ margin: '15px 0px', marginTop:'80px' }} >
+                <h1 className='img-fluid text-center' style={{ margin: '15px 0px', marginTop: '80px' }} >
                     <img className='' src={pandalogo} alt="panda" width="120px" height="80px" />
                     Top {this.captalizeStr(this.props.category)} Headlines</h1>
 
@@ -87,7 +87,7 @@ export default class News extends Component {
                         <div className='row'>
                             {this.state.articles.map((element, index) => {
                                 return <div className='col-md-4 my-2' key={index}>
-                                    <NewsItem title={element.title.slice(0, 45)} description={element.description ? element.description.slice(0, 88) : " "} imgURL={element.urlToImage} newsURL={element.url} author={element.author} publishedAt={element.publishedAt} source={element.source.name} />
+                                    <NewsItem title={element.title.slice(0, 45)} description={element.description ? element.description.slice(0, 88) : " "} imgURL={element.image} newsURL={element.url} author={element.author} publishedAt={element.publishedAt} source={element.source.name} />
                                 </div>
                             })}
                         </div>
