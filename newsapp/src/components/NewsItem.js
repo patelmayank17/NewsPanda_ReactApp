@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import unkonwImg from './news.jpg'
+import unkonwImg from './Images/news.jpg'
 
 export default class NewsItem extends Component {
 
